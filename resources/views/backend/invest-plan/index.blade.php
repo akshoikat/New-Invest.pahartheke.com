@@ -45,17 +45,17 @@
                     <td>
                         <div class="d-flex gap-1" style="gap:5px;">
                             @if($plan->image_1)
-                                <img src="{{ asset('storage/'.$plan->image_1) }}"
+                                <img src="{{ asset($plan->image_1) }}"
                                      style="width:50px;height:50px;object-fit:cover;border-radius:5px;">
                             @endif
 
                             @if($plan->image_2)
-                                <img src="{{ asset('storage/'.$plan->image_2) }}"
+                                <img src="{{ asset($plan->image_2) }}"
                                      style="width:50px;height:50px;object-fit:cover;border-radius:5px;">
                             @endif
 
                             @if($plan->image_3)
-                                <img src="{{ asset('storage/'.$plan->image_3) }}"
+                                <img src="{{ asset($plan->image_3) }}"
                                      style="width:50px;height:50px;object-fit:cover;border-radius:5px;">
                             @endif
                         </div>

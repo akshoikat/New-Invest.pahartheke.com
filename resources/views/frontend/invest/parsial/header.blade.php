@@ -9,8 +9,8 @@
                 </div>
                 <!-- Right: Login | Register -->
                 <div class="space-x-4">
-                    <a href="https://pahartheke.com/users/login" class="hover:underline">Login</a>
-                    <a href="https://pahartheke.com/users/registration" class="hover:underline">Register</a>
+                    <!-- <a href="https://pahartheke.com/users/login" class="hover:underline">Login</a>
+                    <a href="https://pahartheke.com/users/registration" class="hover:underline">Register</a> -->
                 </div>
             </div>
         </div>

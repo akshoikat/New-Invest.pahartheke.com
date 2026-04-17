@@ -137,7 +137,7 @@
 
             <div
                 class="min-w-[250px] h-[400px] bg-cover bg-center rounded-lg flex-shrink-0 cursor-pointer"
-                style="background-image: url('{{ asset('image/demo2.jpeg') }}');">
+                style="background-image: url('{{ asset($plan->image_1) }}');">
 
                 <div class="h-full w-full flex flex-col justify-end bg-gradient-to-t from-black/50 to-transparent p-4 rounded-lg">
 
@@ -178,17 +178,17 @@
 
         <!-- IMAGES -->
         <template x-if="selected?.image_1">
-            <img :src="'/storage/' + selected.image_1"
-                 class="w-full rounded h-64 object-cover mb-2">
+            <img :src="`{{ asset('') }}${selected.image_1}`"
+              class="w-full rounded h-64 object-cover mb-2">
         </template>
 
         <template x-if="selected?.image_2">
-            <img :src="'/storage/' + selected.image_2"
+            <img :src="`{{ asset('') }}${selected.image_2}`"
                  class="w-full rounded h-64 object-cover mb-2">
         </template>
 
         <template x-if="selected?.image_3">
-            <img :src="'/storage/' + selected.image_3"
+            <img :src="`{{ asset('') }}${selected.image_3}`"
                  class="w-full rounded h-64 object-cover mb-2">
         </template>
 

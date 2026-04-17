@@ -3,8 +3,7 @@
             <!-- Logo and Description -->
             <div class="text-center mb-12">
                 <div class="flex items-center justify-center mb-6">
-                    <img src="{{ asset($setting->logo) }}" alt="logo" class="w-8 h-8 mr-2">
-                    <h1 class="text-3xl font-bold text-white"> {{ $setting->company_name }}</h1>
+<img src="{{ asset('storage/'.$setting->logo) }}" class="w-8 h-8 mr-2">                  <h1 class="text-3xl font-bold text-white"> {{ $setting->company_name }}</h1>
                 </div>
                 <p class="text-white max-w-7xl mx-auto leading-relaxed">
                    {{ $setting->company_description }}
