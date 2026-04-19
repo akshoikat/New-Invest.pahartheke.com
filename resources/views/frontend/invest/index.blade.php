@@ -3,9 +3,7 @@
 @section('content')
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-@php
-  $highlight = \App\Models\InvestBanner::latest()->first();
-@endphp
+
 
 @if($highlight)
 <section class="relative bg-[#00303F] overflow-hidden max-w-[1223px] mx-auto">

@@ -20,6 +20,7 @@ class InvestHomeController extends Controller
         $faqs = InvestFaqs::get();
         $plans = InvestPlan::latest()->get();
         $setting = InvestSetting::first();
-        return view('frontend.invest.index', compact('tractions', 'facts', 'faqs', 'plans', 'setting'));
+        $highlight = InvestBanner::latest()->first();
+        return view('frontend.invest.index', compact('tractions', 'facts', 'faqs', 'plans', 'setting', 'highlight'));
     }
 }
