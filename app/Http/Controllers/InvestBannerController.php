@@ -23,7 +23,7 @@ public function index()
 
         InvestBanner::create([
             'title' => $request->title,
-            'points' => $request->points,
+            'points' => json_encode($request->points),
             'button_text' => $request->button_text,
         ]);
 

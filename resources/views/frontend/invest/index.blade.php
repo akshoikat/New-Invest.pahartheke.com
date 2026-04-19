@@ -3,7 +3,15 @@
 @section('content')
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+@php
+    $points = $highlight->points;
 
+    if (is_string($points)) {
+        $points = json_decode($points, true);
+    }
+
+    $points = is_array($points) ? $points : [];
+@endphp
 
 @if($highlight)
 <section class="relative bg-[#00303F] overflow-hidden max-w-[1223px] mx-auto">
@@ -15,7 +23,7 @@
         {{ $highlight->title }}
       </h2>
       <ul class="mt-6 space-y-4 text-gray-300 text-sm sm:text-base">
-@foreach($highlight->points ?? [] as $point)
+@foreach($points as $point)
           <li class="flex items-start">
             <i class="fas fa-check fa-xs mt-1 mr-3 text-white"></i>
             <span>{{ $point }}</span>
