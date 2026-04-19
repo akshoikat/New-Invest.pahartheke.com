@@ -25,13 +25,18 @@ class InvesttractionController extends Controller
         return response()->json(InvestTraction::findOrFail($id));
     }
 
-    public function update(Request $request)
-    {
-        $traction = InvestTraction::findOrFail($request->id);
-        $traction->update($request->all());
+public function update(Request $request,$id)
+{
+    $traction = InvestTraction::findOrFail($id);
 
-        return back()->with('success', 'Updated Successfully');
-    }
+    $traction->update([
+        'icon' => $request->icon, // text field (fas fa-...)
+        'highlight' => $request->highlight,
+        'description' => $request->description,
+    ]);
+
+    return back()->with('success', 'Updated Successfully');
+}
 
     public function destroy($id)
     {

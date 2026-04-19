@@ -4,7 +4,7 @@
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 @php
-  $highlight = \App\Models\InvestBanner::first();
+  $highlight = \App\Models\InvestBanner::latest()->first();
 @endphp
 
 @if($highlight)
@@ -17,7 +17,7 @@
         {{ $highlight->title }}
       </h2>
       <ul class="mt-6 space-y-4 text-gray-300 text-sm sm:text-base">
-        @foreach($highlight->points as $point)
+@foreach($highlight->points ?? [] as $point)
           <li class="flex items-start">
             <i class="fas fa-check fa-xs mt-1 mr-3 text-white"></i>
             <span>{{ $point }}</span>
@@ -100,118 +100,131 @@
     </div>
     @endforeach
 </div>
+<!-- ================== STYLE ================== -->
+<style>
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+    animation: marquee 25s linear infinite;
+    width: max-content;
+}
+</style>
 
 <!-- ================== ALPINE WRAPPER ================== -->
-<div x-data="{
-    open: false,
-    selected: null
-}">
+<div x-data="{ open: false, selected: null }">
 
-<!-- ================== TITLE ================== -->
-<div class="flex items-center justify-center w-full max-w-full mb-8 space-x-4">
-    <hr class="border-gray-300 flex-grow" />
+    <!-- ================== TITLE ================== -->
+    <div class="flex items-center justify-center w-full mb-8 space-x-4">
+        <hr class="border-gray-300 flex-grow" />
+        <h3 class="text-[#2e2e5c] font-extrabold text-2xl text-center whitespace-nowrap">
+            Choose <span class="text-[#4b2e5e]">Your</span>
+            <span id="plan">Investment Plan</span>
+        </h3>
+        <hr class="border-gray-300 flex-grow" />
+    </div>
 
-    <h3 class="text-[#2e2e5c] font-extrabold text-2xl text-center whitespace-nowrap">
-        Choose <span class="text-[#4b2e5e]">Your</span>
-        <span id="plan">Investment Plan</span>
-    </h3>
+    <!-- ================== DESCRIPTION ================== -->
+    <div class="w-full max-w-[1222px] mx-auto mt-6">
+        <p class="text-center text-gray-600 mb-6">
+            Explore our investment plans below. Hover over a card to pause scrolling and view details.
+        </p>
 
-    <hr class="border-gray-300 flex-grow" />
-</div>
-
-<!-- ================== DESCRIPTION ================== -->
-<div class="w-full max-w-[1222px] mx-auto mt-6">
-    <p class="text-center text-gray-600 mb-6">
-        Explore our investment plans below. Hover over a card to pause scrolling and view details.
-    </p>
-
-    <!-- ================== MARQUEE ================== -->
-    <div class="overflow-hidden relative">
-
-        <div
-            @mouseenter="$el.querySelector('.marquee').style.animationPlayState='paused'"
-            @mouseleave="$el.querySelector('.marquee').style.animationPlayState='running'"
-            class="marquee flex gap-6 animate-marquee">
-
-            @foreach($plans as $plan)
+        <!-- ================== SLIDER ================== -->
+        <div class="overflow-hidden relative w-full">
 
             <div
-                class="min-w-[250px] h-[400px] bg-cover bg-center rounded-lg flex-shrink-0 cursor-pointer"
-                style="background-image: url('{{ asset($plan->image_1) }}');">
+                class="marquee flex gap-6 animate-marquee"
+                @mouseenter="$el.style.animationPlayState='paused'"
+                @mouseleave="$el.style.animationPlayState='running'">
 
-                <div class="h-full w-full flex flex-col justify-end bg-gradient-to-t from-black/50 to-transparent p-4 rounded-lg">
+                <!-- DOUBLE LOOP FOR INFINITE EFFECT -->
+                @foreach($plans->concat($plans) as $plan)
 
-                    <h2 class="font-bold text-lg text-white text-center">
-                        {{ $plan->title }}
-                    </h2>
+                <div
+                    class="min-w-[260px] h-[400px] bg-cover bg-center rounded-xl flex-shrink-0 cursor-pointer shadow-lg"
+                    style="background-image: url('{{ asset($plan->image_1) }}');">
 
-                    <button
-                        @click="selected = @js($plan); open = true"
-                        class="mt-4 bg-[#16819B] text-white text-sm font-semibold rounded-full px-4 py-2 w-full">
-                        View Details
-                    </button>
+                    <div class="h-full w-full flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-4 rounded-xl">
+
+                        <h2 class="font-bold text-lg text-white text-center">
+                            {{ $plan->title }}
+                        </h2>
+
+                        <button
+                            @click="selected = @js($plan); open = true"
+                            class="mt-4 bg-[#16819B] hover:bg-[#126c80] transition text-white text-sm font-semibold rounded-full px-4 py-2 w-full">
+                            View Details
+                        </button>
+
+                    </div>
 
                 </div>
 
+                @endforeach
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ================== GLOBAL MODAL ================== -->
+    <div
+        x-show="open"
+        x-transition
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]"
+        style="display:none;">
+
+        <div
+            @click.away="open = false"
+            class="bg-white w-full max-w-3xl p-6 rounded-xl shadow-xl max-h-[90vh] overflow-auto">
+
+            <!-- TITLE -->
+            <h2 class="text-xl font-bold mb-4"
+                x-text="selected?.title"></h2>
+
+            <!-- IMAGES -->
+            <template x-if="selected?.image_1">
+                <img :src="`{{ asset('') }}${selected.image_1}`"
+                     class="w-full rounded-lg h-64 object-cover mb-3">
+            </template>
+
+            <template x-if="selected?.image_2">
+                <img :src="`{{ asset('') }}${selected.image_2}`"
+                     class="w-full rounded-lg h-64 object-cover mb-3">
+            </template>
+
+            <template x-if="selected?.image_3">
+                <img :src="`{{ asset('') }}${selected.image_3}`"
+                     class="w-full rounded-lg h-64 object-cover mb-3">
+            </template>
+
+            <!-- DETAILS -->
+            <div class="mt-4 text-gray-700"
+                 x-html="selected?.details"></div>
+
+            <!-- APPLY BUTTON -->
+            <div class="mt-6 flex justify-center" x-show="selected?.apply_link">
+                <a :href="selected.apply_link"
+                   target="_blank"
+                   class="px-6 py-2 bg-green-600 hover:bg-green-700 transition text-white rounded-full font-semibold">
+                    Apply Now
+                </a>
             </div>
 
-            @endforeach
+            <!-- CLOSE -->
+            <div class="mt-6 text-right">
+                <button @click="open = false"
+                        class="px-4 py-2 bg-gray-700 hover:bg-gray-800 transition text-white rounded-lg">
+                    Close
+                </button>
+            </div>
 
         </div>
     </div>
+
 </div>
-
-<!-- ================== GLOBAL MODAL ================== -->
-<div
-    x-show="open"
-    x-transition
-    class="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]"
-    style="display:none;">
-
-    <div
-        @click.away="open = false"
-        class="bg-white w-full max-w-3xl p-6 rounded-lg shadow-xl max-h-[90vh] overflow-auto">
-
-        <!-- TITLE -->
-        <h2 class="text-xl font-bold mb-4"
-            x-text="selected?.title"></h2>
-
-        <!-- IMAGES -->
-        <template x-if="selected?.image_1">
-            <img :src="`{{ asset('') }}${selected.image_1}`"
-              class="w-full rounded h-64 object-cover mb-2">
-        </template>
-
-        <template x-if="selected?.image_2">
-            <img :src="`{{ asset('') }}${selected.image_2}`"
-                 class="w-full rounded h-64 object-cover mb-2">
-        </template>
-
-        <template x-if="selected?.image_3">
-            <img :src="`{{ asset('') }}${selected.image_3}`"
-                 class="w-full rounded h-64 object-cover mb-2">
-        </template>
-
-        <!-- APPLY -->
-        <div class="mt-6 flex justify-center" x-show="selected?.apply_link">
-            <a :href="selected.apply_link"
-               target="_blank"
-               class="px-6 py-2 bg-green-600 text-white rounded font-semibold">
-                Apply Now
-            </a>
-        </div>
-
-        <!-- CLOSE -->
-        <div class="mt-6 text-right">
-            <button @click="open = false"
-                    class="px-4 py-2 bg-gray-700 text-white rounded">
-                Close
-            </button>
-        </div>
-
-    </div>
-</div>
-
 </div>
 
 <!-- ================== MARQUEE CSS ================== -->

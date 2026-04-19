@@ -163,38 +163,56 @@ $(document).ready(function(){
 });
 function editFact(id){
 
-    $.get("{{ url('admin/invest-fact/edit') }}/" + id, function(data){
+    let path = "{{ route('admin.invest-fact.edit',':id') }}";
+    path = path.replace(':id',id);
 
-        var html = `
-            <form action="{{ route('admin.invest-fact.update') }}" method="POST">
+    $.ajax({
+        url: path,
+        type: "GET",
+        success: function(data){
+
+            let updateUrl = "{{ route('admin.invest-fact.update',':id') }}";
+            updateUrl = updateUrl.replace(':id',data.id);
+
+            var html = `
+            <form action="${updateUrl}" method="POST">
                 @csrf
                 @method('PUT')
 
-                <input type="hidden" name="id" value="${data.id}">
-
                 <div class="form-group">
                     <label>Icon</label>
-                    <input type="text" name="icon" value="${data.icon}" class="form-control" required>
+                    <input type="text"
+                        name="icon"
+                        value="${data.icon}"
+                        class="form-control"
+                        required>
                 </div>
 
                 <div class="form-group">
                     <label>Highlight Text</label>
-                    <input type="text" name="highlight_text" value="${data.highlight_text}" class="form-control" required>
+                    <input type="text"
+                        name="highlight_text"
+                        value="${data.highlight_text}"
+                        class="form-control"
+                        required>
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <input type="text" name="description" value="${data.description}" class="form-control" required>
+                    <input type="text"
+                        name="description"
+                        value="${data.description}"
+                        class="form-control"
+                        required>
                 </div>
 
                 <button class="btn btn-primary mt-2">Update</button>
             </form>
-        `;
+            `;
 
-        $('#fact_edit_modal_body').html(html);
-
-        // FIX: Bootstrap 4 modal open
-        $('#factEditModal').modal('show');
+            $('#fact_edit_modal_body').html(html);
+            $('#factEditModal').modal('show');
+        }
     });
 }
 

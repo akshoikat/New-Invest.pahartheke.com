@@ -33,26 +33,21 @@ public function index()
     public function edit($id)
     {
         $banner = InvestBanner::findOrFail($id);
-        $banner->points = json_decode($banner->points);
 
         return response()->json($banner);
     }
 
-    public function update(Request $request)
+    public function update(Request $request,$id)
     {
-        $request->validate([
-            'title' => 'required|string',
-            'points' => 'required|array',
-        ]);
-
-        $banner = InvestBanner::findOrFail($request->id);
+        $banner = InvestBanner::findOrFail($id);
 
         $banner->update([
             'title' => $request->title,
             'points' => json_encode($request->points),
-            'button_text' => $request->button_text,
+            'button_text' => $request->button_text
         ]);
 
+    
         return back()->with('success','Banner Updated Successfully');
     }
 

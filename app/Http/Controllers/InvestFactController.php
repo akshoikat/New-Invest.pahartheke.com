@@ -28,21 +28,20 @@ class InvestFactController extends Controller
 
     public function edit($id)
     {
-        $fact = InvestFact::findOrFail($id);
-        return response()->json($fact);
+        return response()->json(
+            InvestFact::findOrFail($id)
+        );
     }
 
-    public function update(Request $request)
+    public function update(Request $request,$id)
     {
-        $request->validate([
-            'id' => 'required',
-            'icon' => 'required|string',
-            'highlight_text' => 'required|string',
-            'description' => 'required|string',
-        ]);
+        $fact = InvestFact::findOrFail($id);
 
-        $fact = InvestFact::findOrFail($request->id);
-        $fact->update($request->all());
+        $fact->update([
+            'icon' => $request->icon,
+            'highlight_text' => $request->highlight_text,
+            'description' => $request->description
+        ]);
 
         return redirect()->back()->with('success', 'Fact Updated Successfully');
     }

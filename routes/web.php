@@ -152,34 +152,34 @@ Route::group(['as' => 'admin.', 'middleware' => ['auth', 'verified']], function 
     Route::get('invest-banner', [InvestBannerController::class, 'index'])->name('invest-banner.index');
     Route::post('invest-banner/store', [InvestBannerController::class, 'store'])->name('invest-banner.store');
     Route::get('invest-banner/edit/{id}', [InvestBannerController::class, 'edit'])->name('invest-banner.edit');
-    Route::put('invest-banner/update', [InvestBannerController::class, 'update'])->name('invest-banner.update');
+    Route::put('invest-banner/update/{id}', [InvestBannerController::class,'update'])->name('invest-banner.update');    
     Route::delete('invest-banner/delete/{id}', [InvestBannerController::class, 'destroy'])->name('invest-banner.destroy');
 
     // compleate
     Route::get('invest-faq', [InvestFaqsController::class, 'index'])->name('invest-faq.index');
     Route::post('invest-faq/store', [InvestFaqsController::class, 'store'])->name('invest-faq.store');
     Route::get('invest-faq/edit/{id}', [InvestFaqsController::class, 'edit'])->name('invest-faq.edit');
-    Route::put('invest-faq/update', [InvestFaqsController::class, 'update'])->name('invest-faq.update');
+    Route::put('invest-faq/update/{id}', [InvestFaqsController::class, 'update'])->name('invest-faq.update');
     Route::delete('invest-faq/delete/{id}', [InvestFaqsController::class, 'destroy'])->name('invest-faq.destroy');
 
     // compleate    
     Route::get('invest-fact', [InvestFactController::class, 'index'])->name('invest-fact.index');
     Route::post('invest-fact/store', [InvestFactController::class, 'store'])->name('invest-fact.store');
     Route::get('invest-fact/edit/{id}', [InvestFactController::class, 'edit'])->name('invest-fact.edit');
-    Route::put('invest-fact/update', [InvestFactController::class, 'update'])->name('invest-fact.update');
+    Route::put('invest-fact/update/{id}', [InvestFactController::class, 'update'])->name('invest-fact.update');
     Route::delete('invest-fact/delete/{id}', [InvestFactController::class, 'destroy'])->name('invest-fact.destroy');
 
     // Compleate
     Route::get('invest-traction', [InvesttractionController::class, 'index'])->name('invest-traction.index');
     Route::post('invest-traction/store', [InvesttractionController::class, 'store'])->name('invest-traction.store');
     Route::get('invest-traction/edit/{id}', [InvesttractionController::class, 'edit'])->name('invest-traction.edit');
-    Route::put('invest-traction/update', [InvesttractionController::class, 'update'])->name('invest-traction.update');
+    Route::put('invest-traction/update/{id}', [InvesttractionController::class, 'update'])->name('invest-traction.update');
     Route::delete('invest-traction/delete/{id}', [InvesttractionController::class, 'destroy'])->name('invest-traction.destroy');
     // compleate
     Route::get('invest-plan', [InvestplanController::class, 'index'])->name('invest-plan.index');
     Route::post('invest-plan/store', [InvestplanController::class, 'store'])->name('invest-plan.store');
     Route::get('invest-plan/edit/{id}', [InvestplanController::class, 'edit'])->name('invest-plan.edit');
-    Route::put('invest-plan/update', [InvestplanController::class, 'update'])->name('invest-plan.update');
+    Route::put('invest-plan/update/{id}', [InvestplanController::class, 'update'])->name('invest-plan.update');
     Route::delete('invest-plan/delete/{id}', [InvestplanController::class, 'destroy'])->name('invest-plan.destroy');
 });
 

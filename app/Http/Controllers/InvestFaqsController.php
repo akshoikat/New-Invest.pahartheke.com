@@ -38,22 +38,15 @@ class InvestFaqsController extends Controller
     }
 
     // UPDATE
-    public function update(Request $request)
-    {
-        $request->validate([
-            'id'       => 'required|exists:invest_faqs,id',
-            'question' => 'required|string',
-            'answer'   => 'required|string',
-            'status'   => 'required|boolean',
-        ]);
+public function update(Request $request,$id)
+{
+    $faq = InvestFaqs::findOrFail($id);
 
-        $faq = InvestFaqs::findOrFail($request->id);
-
-        $faq->update([
-            'question' => $request->question,
-            'answer'   => $request->answer,
-            'status'   => $request->status,
-        ]);
+    $faq->update([
+        'question' => $request->question,
+        'answer' => $request->answer,
+        'status' => $request->status
+    ]);
 
         return redirect()->back()->with('success', 'FAQ updated successfully');
     }

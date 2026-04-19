@@ -189,54 +189,111 @@
 
 function editPlan(id){
 
-    $.get("{{ url('admin/invest-plan/edit') }}/" + id, function(data){
+    let path = "{{ route('admin.invest-plan.edit',':id') }}";
+    path = path.replace(':id',id);
 
-        let html = `
-        <form action="{{ route('admin.invest-plan.update') }}" method="POST">
-            @csrf
-            @method('PUT')
+    $.ajax({
+        url: path,
+        type: "GET",
+        success: function(data){
 
-            <input type="hidden" name="id" value="${data.id}">
+            let updateUrl = "{{ route('admin.invest-plan.update',':id') }}";
+            updateUrl = updateUrl.replace(':id',data.id);
 
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" name="title" value="${data.title}" class="form-control" required>
-            </div>
+            let html = `
+            <form action="${updateUrl}"
+                  method="POST"
+                  enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
 
-            <div class="form-group">
-                <label>Short Description</label>
-                <textarea name="short_description" class="form-control" required>${data.short_description}</textarea>
-            </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text"
+                        name="title"
+                        value="${data.title}"
+                        class="form-control"
+                        required>
+                </div>
 
-            <div class="form-group">
-                <label>Details</label>
-                <textarea name="details" class="form-control">${data.details ?? ''}</textarea>
-            </div>
+                <div class="form-group">
+                    <label>Short Description</label>
+                    <textarea name="short_description"
+                        class="form-control"
+                        required>${data.short_description}</textarea>
+                </div>
 
-            <div class="form-group">
-                <label>Button Text</label>
-                <input type="text" name="button_text" value="${data.button_text ?? ''}" class="form-control">
-            </div>
+                <div class="form-group">
+                    <label>Details</label>
+                    <textarea name="details"
+                        class="form-control">${data.details ?? ''}</textarea>
+                </div>
 
-            <div class="form-group">
-                <label>Button Apply</label>
-                <input type="text" name="button_apply" value="${data.button_apply ?? ''}" class="form-control">
-            </div>
+                <div class="form-group">
+                    <label>Button Text</label>
+                    <input type="text"
+                        name="button_text"
+                        value="${data.button_text ?? ''}"
+                        class="form-control">
+                </div>
 
-            <div class="form-group">
-                <label>Apply Link</label>
-                <input type="text" name="apply_link" value="${data.apply_link ?? ''}" class="form-control">
-            </div>
+                <div class="form-group">
+                    <label>Button Apply</label>
+                    <input type="text"
+                        name="button_apply"
+                        value="${data.button_apply ?? ''}"
+                        class="form-control">
+                </div>
 
-            <button class="btn btn-primary mt-2">Update</button>
-        </form>
-        `;
+                <div class="form-group">
+                    <label>Apply Link</label>
+                    <input type="text"
+                        name="apply_link"
+                        value="${data.apply_link ?? ''}"
+                        class="form-control">
+                </div>
 
-        $('#plan_edit_body').html(html);
-        $('#planEditModal').modal('show');
+                <hr>
+
+                <div class="form-group">
+                    <label>Image 1</label>
+                    <input type="file" name="image_1" class="form-control">
+
+                    ${data.image_1 ? 
+                        `<img src="/${data.image_1}" 
+                        style="width:80px;margin-top:5px;">`
+                    : ''}
+                </div>
+
+                <div class="form-group">
+                    <label>Image 2</label>
+                    <input type="file" name="image_2" class="form-control">
+
+                    ${data.image_2 ? 
+                        `<img src="/${data.image_2}" 
+                        style="width:80px;margin-top:5px;">`
+                    : ''}
+                </div>
+
+                <div class="form-group">
+                    <label>Image 3</label>
+                    <input type="file" name="image_3" class="form-control">
+
+                    ${data.image_3 ? 
+                        `<img src="/${data.image_3}" 
+                        style="width:80px;margin-top:5px;">`
+                    : ''}
+                </div>
+
+                <button class="btn btn-primary mt-2">Update</button>
+            </form>
+            `;
+
+            $('#plan_edit_body').html(html);
+            $('#planEditModal').modal('show');
+        }
     });
 }
-
 // DELETE
 function deletePlan(id){
 

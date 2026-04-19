@@ -179,46 +179,92 @@ function addPoint(){
         '<input type="text" name="points[]" class="form-control mb-2">'
     );
 }
+$(document).on('click','#add-edit-point',function(){
+
+    $('#edit-points-wrapper').append(`
+        <div class="point-item mb-2 d-flex">
+            <input type="text" name="points[]" class="form-control">
+            <button type="button" class="btn btn-danger btn-sm ml-2 remove-point">X</button>
+        </div>
+    `);
+
+});
+
+$(document).on('click','.remove-point',function(){
+    $(this).closest('.point-item').remove();
+});
 
 function editBanner(id){
 
     let path = "{{ route('admin.invest-banner.edit',':id') }}";
     path = path.replace(':id',id);
 
-    $.get(path,function(response){
+    $.ajax({
+        url: path,
+        type: "GET",
+        success: function(response){
 
-        let pointsHtml = '';
-        response.points.forEach(function(point){
-            pointsHtml += `<input type="text" name="points[]" value="${point}" class="form-control mb-2">`;
-        });
+            let points = response.points;
 
-        $("#edit_modal_body").html(`
-        <form action="{{ route('admin.invest-banner.update') }}" method="POST">
-            @csrf
-            @method('PUT')
+            // যদি JSON string হয়
+            if(typeof points === "string"){
+                points = JSON.parse(points);
+            }
 
-            <input type="hidden" name="id" value="${response.id}">
+            let pointsHtml = '';
 
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" name="title" value="${response.title}" class="form-control">
-            </div>
+            points.forEach(function(point){
+                pointsHtml += `
+                <div class="point-item mb-2 d-flex">
+                    <input type="text" name="points[]" value="${point}" class="form-control">
+                    <button type="button" class="btn btn-danger btn-sm ml-2 remove-point">X</button>
+                </div>`;
+            });
 
-            <div class="form-group">
-                <label>Points</label>
-                ${pointsHtml}
-            </div>
+            let updateUrl = "{{ route('admin.invest-banner.update',':id') }}";
+            updateUrl = updateUrl.replace(':id',response.id);
 
-            <div class="form-group">
-                <label>Button Text</label>
-                <input type="text" name="button_text" value="${response.button_text ?? ''}" class="form-control">
-            </div>
+            let form = `
+            <form action="${updateUrl}" method="POST">
+                @csrf
+                @method('PUT')
 
-            <button class="btn btn-primary">Update</button>
-        </form>
-        `);
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title"
+                        value="${response.title}"
+                        class="form-control">
+                </div>
 
-        $('#bannerEditModal').modal('show');
+                <div class="form-group">
+                    <label>Points</label>
+
+                    <div id="edit-points-wrapper">
+                        ${pointsHtml}
+                    </div>
+
+                    <button type="button"
+                        class="btn btn-sm btn-secondary mt-2"
+                        id="add-edit-point">
+                        Add More
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label>Button Text</label>
+                    <input type="text"
+                        name="button_text"
+                        value="${response.button_text ?? ''}"
+                        class="form-control">
+                </div>
+
+                <button class="btn btn-primary">Update</button>
+            </form>
+            `;
+
+            $("#edit_modal_body").html(form);
+            $('#bannerEditModal').modal('show');
+        }
     });
 }
 

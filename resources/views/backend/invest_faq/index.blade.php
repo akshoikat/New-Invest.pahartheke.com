@@ -132,23 +132,36 @@ invest-faq.destroy
 <script>
 function editFaq(id){
 
-    $.get("{{ url('admin/invest-faq/edit') }}/" + id, function(data){
+    let path = "{{ route('admin.invest-faq.edit',':id') }}";
+    path = path.replace(':id',id);
 
-        let html = `
-            <form action="{{ route('admin.invest-faq.update') }}" method="POST">
+    $.ajax({
+        url: path,
+        type: "GET",
+        success: function(data){
+
+            let updateUrl = "{{ route('admin.invest-faq.update',':id') }}";
+            updateUrl = updateUrl.replace(':id',data.id);
+
+            let html = `
+            <form action="${updateUrl}" method="POST">
                 @csrf
                 @method('PUT')
 
-                <input type="hidden" name="id" value="${data.id}">
-
                 <div class="form-group">
                     <label>Question</label>
-                    <input type="text" name="question" value="${data.question}" class="form-control" required>
+                    <input type="text"
+                        name="question"
+                        value="${data.question}"
+                        class="form-control"
+                        required>
                 </div>
 
                 <div class="form-group">
                     <label>Answer</label>
-                    <textarea name="answer" class="form-control" required>${data.answer}</textarea>
+                    <textarea name="answer"
+                        class="form-control"
+                        required>${data.answer}</textarea>
                 </div>
 
                 <div class="form-group">
@@ -161,10 +174,11 @@ function editFaq(id){
 
                 <button class="btn btn-primary mt-2">Update</button>
             </form>
-        `;
+            `;
 
-        $('#faq_edit_body').html(html);
-        $('#faqEditModal').modal('show');
+            $('#faq_edit_body').html(html);
+            $('#faqEditModal').modal('show');
+        }
     });
 }
 
