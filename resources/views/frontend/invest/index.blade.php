@@ -147,7 +147,7 @@
                 @mouseleave="$el.style.animationPlayState='running'">
 
                 <!-- DOUBLE LOOP FOR INFINITE EFFECT -->
-                @foreach($plans->concat($plans) as $plan)
+                @foreach($plans as $plan)
 
                 <div
                     class="min-w-[260px] h-[400px] bg-cover bg-center rounded-xl flex-shrink-0 cursor-pointer shadow-lg"
