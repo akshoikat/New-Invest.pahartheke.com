@@ -189,6 +189,8 @@
             <!-- TITLE -->
             <h2 class="text-xl font-bold mb-4"
                 x-text="selected?.title"></h2>
+              
+                <p x-text="selected?.description"></p>
 
             <!-- IMAGES -->
             <template x-if="selected?.image_1">
@@ -287,10 +289,108 @@
       </style>
 
 
-      <button type="button" class="mt-5 unique-gradient-animate inline-flex items-center rounded-full px-7 py-2 text-white text-sm sm:text-base font-normal transition-all">
+      <!-- <button type="button" class="mt-5 unique-gradient-animate inline-flex items-center rounded-full px-7 py-2 text-white text-sm sm:text-base font-normal transition-all">
         <i class="fas fa-mouse-pointer mr-3 text-lg"></i>
         Express Interest to Invest
-      </button>
+      </button> -->
+      <div class="w-full max-w-[1222px] mx-auto space-y-6" style="margin-top: 25px;">
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+<div 
+    x-data="{ open: false, selected: null }"
+    class="w-full max-w-[1222px] mx-auto space-y-6"
+    style="margin-top: 25px;"
+>
+
+    {{-- Plans List --}}
+    @foreach($plans as $plan)
+    <div class="bg-[#F7F7F7] px-8 py-6 flex flex-col md:flex-row md:items-center md:justify-between"
+         style="text-align: justify; margin: 15px 0px; border-radius: 12px;">
+
+        <div>
+            <h2 class="font-extrabold text-[18px] leading-[22px] text-[#0A0A0A]">
+                {{ $plan->title }}
+            </h2>
+
+            @if ($plan->short_description)
+            <p class="text-[#6B6B6B] text-[14px] mt-1">
+                {!! nl2br(e($plan->short_description)) !!}
+            </p>
+            @endif
+
+            @if ($plan->details)
+            <p class="text-[#6B6B6B] text-[14px]">
+                {!! nl2br(e(Str::limit($plan->details, 100))) !!}
+            </p>
+            @endif
+        </div>
+
+        <button 
+            @click="selected = @js($plan); open = true"
+            class="mt-4 md:mt-0 bg-[#16819B] text-white text-[13px] font-semibold rounded-full px-6 py-2 hover:bg-[#12677f]"
+            type="button">
+            View Details
+        </button>
+    </div>
+    @endforeach
+
+
+    {{-- ================= GLOBAL MODAL ================= --}}
+    <div
+        x-show="open"
+        x-transition
+        class="fixed bg-black/60 flex items-center justify-center z-[9999]"
+        style="display:none; inset: -25px;">
+
+        <div
+            @click.away="open = false"
+            class="bg-white w-full max-w-3xl p-6 rounded-xl shadow-xl max-h-[90vh] overflow-auto">
+
+            <!-- TITLE -->
+            <h2 class="text-xl font-bold mb-4"
+                x-text="selected?.title"></h2>
+
+            <!-- DETAILS -->
+            <div class="mt-4 text-gray-700"
+                 x-html="selected?.details"></div>
+
+            <!-- IMAGES -->
+            <template x-if="selected?.image_1">
+                <img :src="`{{ asset('') }}${selected.image_1}`"
+                     class="w-full rounded-lg h-64 object-cover mb-3">
+            </template>
+
+            <template x-if="selected?.image_2">
+                <img :src="`{{ asset('') }}${selected.image_2}`"
+                     class="w-full rounded-lg h-64 object-cover mb-3">
+            </template>
+
+            <template x-if="selected?.image_3">
+                <img :src="`{{ asset('') }}${selected.image_3}`"
+                     class="w-full rounded-lg h-64 object-cover mb-3">
+            </template>
+
+            <!-- APPLY BUTTON -->
+            <div class="mt-6 flex justify-center" x-show="selected?.apply_link">
+                <a :href="selected.apply_link"
+                   target="_blank"
+                   class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full font-semibold">
+                    Apply Now
+                </a>
+            </div>
+
+            <!-- CLOSE -->
+            <div class="mt-6 text-right">
+                <button @click="open = false"
+                        class="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 
     </div>
 
@@ -365,21 +465,38 @@
     </div>
 
     <div class="mt-10 border-t border-gray-300 pt-6">
-      <h3 class="font-extrabold text-base mb-4">📞 For more details:</h3>
-      <div class="flex flex-wrap justify-start gap-x-20 gap-y-4 text-xs font-semibold text-gray-900" style="column-gap:13rem;">
-        <a class="flex items-center space-x-2" href="#">
-          <img class="w-5 h-5" src="https://storage.googleapis.com/a1aa/image/29e606bd-5a72-4ea5-3f6f-891f7aacd1c1.jpg" alt="WhatsApp" />
-          <span>WhatsApp Now</span>
-        </a>
-        <a class="flex items-center space-x-2" href="#">
-          <img class="w-5 h-5" src="https://storage.googleapis.com/a1aa/image/bb28ca1c-e2cc-417c-c8e8-3c0f45dc0a6b.jpg" alt="Email" />
-          <span>Email Us</span>
-        </a>
-        <a class="flex items-center space-x-2" href="#">
-          <img class="w-5 h-5" src="https://storage.googleapis.com/a1aa/image/4fd2bb4f-ce05-4bff-7266-16e73b3297ba.jpg" alt="Call" />
-          <span>Call Now</span>
-        </a>
-      </div>
+        <h3 class="font-extrabold text-base mb-4">📞 For more details:</h3>
+
+        <div class="flex flex-wrap justify-start gap-x-20 gap-y-4 text-xs font-semibold text-gray-900" style="column-gap:13rem;">
+
+            {{-- WhatsApp --}}
+            <a class="flex items-center space-x-2"
+              href="https://wa.me/{{ $setting->investment_phone }}"
+              target="_blank">
+                <img class="w-5 h-5"
+                    src="https://storage.googleapis.com/a1aa/image/29e606bd-5a72-4ea5-3f6f-891f7aacd1c1.jpg"
+                    alt="WhatsApp" />
+                <span>WhatsApp Now</span>
+            </a>
+
+            {{-- Email --}}
+            <a class="flex items-center space-x-2"
+              href="mailto:{{ $setting->investment_email }}">
+                <img class="w-5 h-5"
+                    src="https://storage.googleapis.com/a1aa/image/bb28ca1c-e2cc-417c-c8e8-3c0f45dc0a6b.jpg"
+                    alt="Email" />
+                <span>Email Us</span>
+            </a>
+
+            {{-- Call Now --}}
+            <a class="flex items-center space-x-2"
+              href="tel:{{ $setting->investment_phone }}">
+                <img class="w-5 h-5"
+                    src="https://storage.googleapis.com/a1aa/image/4fd2bb4f-ce05-4bff-7266-16e73b3297ba.jpg"
+                    alt="Call" />
+                <span>Call Now</span>
+            </a>
+        </div>
     </div>
   </div>
 </section>
