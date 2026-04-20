@@ -340,7 +340,7 @@
         x-show="open"
         x-transition
         class="fixed bg-black/60 flex items-center justify-center z-[9999]"
-        style="display:none; inset: -25px;">
+        style="display:none; inset: -25px; padding: 25px;">
 
         <div
             @click.away="open = false"
@@ -350,9 +350,7 @@
             <h2 class="text-xl font-bold mb-4"
                 x-text="selected?.title"></h2>
 
-            <!-- DETAILS -->
-            <div class="mt-4 text-gray-700"
-                 x-html="selected?.details"></div>
+            
 
             <!-- IMAGES -->
             <template x-if="selected?.image_1">
@@ -369,6 +367,10 @@
                 <img :src="`{{ asset('') }}${selected.image_3}`"
                      class="w-full rounded-lg h-64 object-cover mb-3">
             </template>
+
+            <!-- DETAILS -->
+            <div class="mt-4 text-gray-700"
+                 x-html="selected?.details"></div>
 
             <!-- APPLY BUTTON -->
             <div class="mt-6 flex justify-center" x-show="selected?.apply_link">
@@ -471,7 +473,7 @@
 
             {{-- WhatsApp --}}
             <a class="flex items-center space-x-2"
-              href="https://wa.me/{{ $setting->investment_phone }}"
+              href="https://wa.me/+880{{ $setting->investment_phone }}"
               target="_blank">
                 <img class="w-5 h-5"
                     src="https://storage.googleapis.com/a1aa/image/29e606bd-5a72-4ea5-3f6f-891f7aacd1c1.jpg"
