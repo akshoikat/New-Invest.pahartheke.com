@@ -1,0 +1,7 @@
+
+#Invet-Plan
+GET     /api/invest-plan
+GET     /api/invest-plan/1
+POST    /api/invest-plan
+POST    /api/invest-plan/update/1
+DELETE  /api/invest-plan/1
